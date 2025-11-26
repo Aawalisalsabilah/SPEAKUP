@@ -16,14 +16,8 @@ class StudentSeeder extends Seeder
     {
         Student::create([
             'nim' => '1204230085',
-            'name' => 'Ridho Dummy',
+            'name' => 'Ridho',
             'password' => Hash::make('password123'),
-        ]);
-
-        Student::create([
-            'nim' => '1204230056',
-            'name' => 'Adela Dummy',
-            'password' => Hash::make('rahasia123'),
         ]);
     }
 }
