@@ -12,10 +12,6 @@ use App\Http\Controllers\ReportController;
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
 
-Route::get('/', function() {
-    return view('student.dashboard');
-})->middleware('auth.student');
-
 Route::middleware('auth.admin')->group(function () {
     Route::get('/admin/dashboard', function() {
         return "Dashboard Admin";
@@ -23,10 +19,7 @@ Route::middleware('auth.admin')->group(function () {
 });
 
 Route::middleware('auth.student')->group(function () {
-    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
-});
-
-Route::middleware('auth.student')->group(function () {
+    Route::get('/', [StudentDashboardController::class, 'index'])->name('student.dashboard');
     Route::get('/laporan/buat', [ReportController::class, 'create'])->name('laporan.create');
     Route::post('/laporan/store', [ReportController::class, 'store'])->name('laporan.store');
 });

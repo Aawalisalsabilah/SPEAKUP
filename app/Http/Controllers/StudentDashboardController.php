@@ -11,10 +11,26 @@ class StudentDashboardController extends Controller
     {
         $student = session('student');
 
-        $reports = Report::where('student_id', $student['id'])
+        if (!$student) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $reports = Report::where('student_id', $student->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('student.dashboard', compact('student', 'reports'));
+        $stats = [
+            'total'     => $reports->count(),
+            'waiting'   => $reports->where('status', 'Menunggu')->count(),
+            'process'   => $reports->where('status', 'Diproses')->count(),
+            'done'      => $reports->where('status', 'Selesai')->count(),
+            'rejected'  => $reports->where('status', 'Ditolak')->count(),
+        ];
+
+        return view('student.dashboard', [
+            'student' => $student,
+            'reports' => $reports,
+            'stats'   => $stats,
+        ]);
     }
 }

@@ -23,6 +23,7 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
+        // === LOGIN STUDENT ===
         if ($request->role === 'student') {
 
             $student = Student::where('nim', $request->username)->first();
@@ -32,9 +33,11 @@ class LoginController extends Controller
             }
 
             session(['student' => $student]);
+
             return redirect()->route('student.dashboard');
         }
 
+        // === LOGIN ADMIN ===
         if ($request->role === 'admin') {
 
             $admin = Admin::where('employee_code', $request->username)->first();
@@ -44,6 +47,7 @@ class LoginController extends Controller
             }
 
             session(['admin' => $admin]);
+
             return redirect()->route('dashboard.admin');
         }
 

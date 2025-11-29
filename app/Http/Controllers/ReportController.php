@@ -7,9 +7,9 @@ use App\Models\Report;
 
 class ReportController extends Controller
 {
-     public function create()
+    public function create()
     {
-        return view('student.report.index'); // sesuaikan path view kamu
+        return view('student.report.index');
     }
 
     public function store(Request $request)
@@ -22,13 +22,19 @@ class ReportController extends Controller
             'evidence'      => 'nullable|file|mimes:jpg,jpeg,png,mp4,pdf|max:4096',
         ]);
 
+        $student = session('student');
+        if (!$student) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
         $path = null;
+
         if ($request->hasFile('evidence')) {
             $path = $request->file('evidence')->store('evidence', 'public');
         }
 
         Report::create([
-            'student_id'    => session('student')->id,
+            'student_id'    => $student->id,
             'title'         => $request->title,
             'category'      => $request->category,
             'is_anonymous'  => $request->is_anonymous,
