@@ -38,7 +38,7 @@
             </li>
 
             <li>
-                <a href=""
+                <a href="{{ route('laporan.history') }}"
                     class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all
                     {{ request()->is('riwayat')
                         ? 'bg-[#EF4444] text-white shadow-md'
@@ -56,7 +56,7 @@
             </li>
 
             <li>
-                <a href=""
+                <a href="{{ route('logout') }}"
                     class="p-[10px_16px] flex items-center gap-[14px] rounded-full h-11 transition-all
                     hover:bg-[#EF4444] hover:text-white">
                     <img src="{{asset('images/icons/security-safe.svg')}}" alt="icon" class="opacity-90">

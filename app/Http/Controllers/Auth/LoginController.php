@@ -53,4 +53,21 @@ class LoginController extends Controller
 
         return back()->with('error', 'Role tidak dikenal');
     }
+
+    public function logout()
+    {
+        // Hapus session mahasiswa bila ada
+        if (session()->has('student')) {
+            session()->forget('student');
+        }
+
+        // Hapus session admin bila ada
+        if (session()->has('admin')) {
+            session()->forget('admin');
+        }
+
+        session()->flush(); // bersihkan semua session
+
+        return redirect()->route('login')->with('success', 'Berhasil logout.');
+    }
 }

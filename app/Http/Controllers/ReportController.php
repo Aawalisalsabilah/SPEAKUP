@@ -45,4 +45,15 @@ class ReportController extends Controller
 
         return redirect()->route('laporan.create')->with('success', 'Laporan berhasil dikirim!');
     }
+
+    public function history()
+    {
+        $student = session('student');
+
+        $reports = Report::where('student_id', $student->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('student.report.history', compact('student', 'reports'));
+    }
 }
