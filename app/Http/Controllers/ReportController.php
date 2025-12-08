@@ -56,4 +56,20 @@ class ReportController extends Controller
 
         return view('student.report.history', compact('student', 'reports'));
     }
+
+    public function show(Report $report)
+    {
+        $student = session('student');
+        if (!$student) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // pastikan laporan ini milik mahasiswa yang login
+        if ($report->student_id !== $student->id) {
+            abort(403);
+        }
+
+        return view('student.report.show', compact('student', 'report'));
+    }
+
 }

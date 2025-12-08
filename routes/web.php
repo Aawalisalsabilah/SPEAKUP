@@ -23,5 +23,6 @@ Route::middleware('auth.student')->group(function () {
     Route::get('/laporan/buat', [ReportController::class, 'create'])->name('laporan.create');
     Route::post('/laporan/store', [ReportController::class, 'store'])->name('laporan.store');
     Route::get('/laporan/history', [ReportController::class, 'history'])->name('laporan.history');
+    Route::get('/laporan/{report}', [ReportController::class, 'show'])->name('laporan.show');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });

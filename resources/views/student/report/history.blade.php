@@ -20,10 +20,12 @@
                 <div class="flex items-center gap-[30px]">
 
                     <div class="flex gap-[14px]">
-                        <a class="w-[46px] h-[46px] flex items-center justify-center rounded-full border border-[#EEEEEE]">
+                        <a
+                            class="w-[46px] h-[46px] flex items-center justify-center rounded-full border border-[#EEEEEE]">
                             <img src="{{ asset('images/icons/receipt-text.svg') }}">
                         </a>
-                        <a class="w-[46px] h-[46px] flex items-center justify-center rounded-full border border-[#EEEEEE]">
+                        <a
+                            class="w-[46px] h-[46px] flex items-center justify-center rounded-full border border-[#EEEEEE]">
                             <img src="{{ asset('images/icons/notification.svg') }}">
                         </a>
                     </div>
@@ -56,41 +58,48 @@
                 <div class="space-y-4">
 
                     @foreach ($reports as $report)
-                        <div class="bg-white border shadow rounded-xl p-5">
+                        <div class="bg-white border shadow rounded-xl p-5 cursor-pointer">
 
-                            <div class="flex justify-between items-start">
+                            <a href="{{ route('laporan.show', $report->id) }}" class="block">
+                                <div class="flex justify-between items-start">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-bold hover:underline">{{ $report->title }}</h3>
+                                        <p class="text-sm text-gray-500">{{ $report->category }}</p>
 
-                                <div class="space-y-2">
-                                    <h3 class="text-lg font-bold">{{ $report->title }}</h3>
-                                    <p class="text-sm text-gray-500">{{ $report->category }}</p>
+                                        @if ($report->is_anonymous)
+                                            <p class="text-sm text-gray-500">Pelapor: <span
+                                                    class="font-semibold">Anonim</span></p>
+                                        @else
+                                            <p class="text-sm text-gray-500">Pelapor: <span
+                                                    class="font-semibold">{{ $student->name }}</span></p>
+                                        @endif
 
-                                    <p class="text-sm">
-                                        Status:
-                                        <span class="font-semibold
-                                            @if ($report->status == 'Menunggu') text-yellow-500
-                                            @elseif($report->status == 'Diproses') text-blue-600
-                                            @elseif($report->status == 'Selesai') text-green-600
-                                            @elseif($report->status == 'Ditolak') text-red-600
-                                            @endif
-                                        ">
-                                            {{ $report->status }}
-                                        </span>
-                                    </p>
+                                        <p class="text-sm">
+                                            Status:
+                                            <span
+                                                class="font-semibold
+                            @if ($report->status == 'Menunggu') text-yellow-500
+                            @elseif($report->status == 'Diproses') text-blue-600
+                            @elseif($report->status == 'Selesai') text-green-600
+                            @elseif($report->status == 'Ditolak') text-red-600 @endif
+                        ">
+                                                {{ $report->status }}
+                                            </span>
+                                        </p>
 
-                                    <p class="text-xs text-gray-400">
-                                        {{ $report->created_at->format('d M Y, H:i') }}
-                                    </p>
+                                        <p class="text-xs text-gray-400">
+                                            {{ $report->created_at->format('d M Y, H:i') }}
+                                        </p>
+                                    </div>
+
+                                    @if ($report->evidence)
+                                        <a href="{{ asset('storage/' . $report->evidence) }}" target="_blank"
+                                            class="text-sm text-blue-600 underline">
+                                            Lihat Bukti
+                                        </a>
+                                    @endif
                                 </div>
-
-                                @if ($report->evidence)
-                                    <a href="{{ asset('storage/' . $report->evidence) }}"
-                                       target="_blank"
-                                       class="text-sm text-blue-600 underline">
-                                        Lihat Bukti
-                                    </a>
-                                @endif
-
-                            </div>
+                            </a>
 
                         </div>
                     @endforeach
@@ -102,4 +111,5 @@
 
     </section>
 </body>
+
 </html>

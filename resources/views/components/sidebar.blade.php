@@ -32,7 +32,7 @@
                     {{ request()->is('laporan/buat')
                         ? 'bg-[#EF4444] text-white shadow-md'
                         : 'hover:bg-[#EF4444] hover:text-white' }}">
-                    <img src="{{asset('images/icons/sms-tracking.svg')}}" alt="icon" class="opacity-90">
+                    <img src="{{asset('images/icons/sms-tracking-grey.svg')}}" alt="icon" class="opacity-90">
                     <p class="font-semibold">Buat Laporan</p>
                 </a>
             </li>
