@@ -56,17 +56,16 @@ class LoginController extends Controller
 
     public function logout()
     {
-        // Hapus session mahasiswa bila ada
-        if (session()->has('student')) {
-            session()->forget('student');
-        }
+        session()->forget('student');
+        session()->flush();
 
-        // Hapus session admin bila ada
-        if (session()->has('admin')) {
-            session()->forget('admin');
-        }
+        return redirect()->route('login')->with('success', 'Berhasil logout.');
+    }
 
-        session()->flush(); // bersihkan semua session
+    public function logoutAdmin()
+    {
+        session()->forget('admin');
+        session()->flush();
 
         return redirect()->route('login')->with('success', 'Berhasil logout.');
     }

@@ -91,7 +91,7 @@
 
                     <div class="flex items-center h-[52px] px-4 border rounded-full">
                         <img src="{{ asset('images/icons/note-favorite-outline.svg') }}" class="mr-3">
-                        <input type="text" name="title" class="w-full outline-none"
+                        <input type="text" name="title" class="w-full outline-none font-semibold"
                             placeholder="contoh: Parkir motor banjir" required>
                     </div>
                 </div>
@@ -166,8 +166,8 @@
 
                     <div class="flex items-start p-4 border rounded-[20px]">
                         <img src="{{ asset('images/icons/document-text.svg') }}" class="mr-3">
-                        <textarea name="description" class="w-full h-[150px] outline-none" placeholder="contoh: Parkir motor banjir..."
-                            required></textarea>
+                        <textarea name="description" class="w-full h-[150px] outline-none font-semibold"
+                            placeholder="contoh: Parkir motor banjir..." required></textarea>
                     </div>
                 </div>
 

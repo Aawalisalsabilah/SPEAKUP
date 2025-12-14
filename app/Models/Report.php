@@ -10,9 +10,16 @@ class Report extends Model
         'student_id',
         'title',
         'category',
-        'is_anonymous',
         'description',
         'evidence',
+        'is_anonymous',
         'status',
+        'admin_notes',  // tambahkan ini
     ];
+
+    // Tambahkan relasi ini
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }
