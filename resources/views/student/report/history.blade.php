@@ -21,17 +21,6 @@
             <div class="nav flex justify-end p-5 border-b border-[#EEEEEE]">
                 <div class="flex items-center gap-[30px]">
 
-                    <div class="flex gap-[14px]">
-                        <a
-                            class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="{{ asset('images/icons/receipt-text.svg') }}" alt="icon">
-                        </a>
-                        <a
-                            class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="{{ asset('images/icons/notification.svg') }}" alt="icon">
-                        </a>
-                    </div>
-
                     <div class="h-[46px] w-[1px] flex shrink-0 border border-[#EEEEEE]"></div>
 
                     <div class="flex gap-3 items-center">

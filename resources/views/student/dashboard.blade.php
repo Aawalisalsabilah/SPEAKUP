@@ -21,17 +21,6 @@
             <div class="nav flex justify-end p-5 border-b border-[#EEEEEE]">
                 <div class="flex items-center gap-[30px]">
 
-                    <div class="flex gap-[14px]">
-                        <a
-                            class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="{{ asset('images/icons/receipt-text.svg') }}" alt="icon">
-                        </a>
-                        <a
-                            class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="{{ asset('images/icons/notification.svg') }}" alt="icon">
-                        </a>
-                    </div>
-
                     <div class="h-[46px] w-[1px] flex shrink-0 border border-[#EEEEEE]"></div>
 
                     <div class="flex gap-3 items-center">
@@ -54,15 +43,6 @@
                         <p class="font-extrabold text-[30px] leading-[45px]">Dashboard</p>
                         <p class="text-[#7F8190]">Pantau semua laporan kamu di sini</p>
                     </div>
-                    {{-- <a href="{{ route('laporan.create') }}"
-                        class="p-[14px_20px] bg-[#0A090B] text-white rounded-full font-semibold hover:shadow-[0_10px_16px_0_#0A090B0D] transition-all duration-300 flex items-center gap-[10px]">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Buat Laporan
-                    </a> --}}
                 </div>
             </div>
 

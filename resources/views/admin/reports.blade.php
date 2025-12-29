@@ -22,13 +22,12 @@
                 <div class="flex items-center gap-[30px]">
 
                     <div class="flex gap-[14px]">
-                        <a class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE]">
-                            <img src="{{ asset('images/icons/receipt-text.svg') }}" alt="icon">
-                        </a>
-                        <a class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE] relative">
+                        <a
+                            class="w-[46px] h-[46px] flex shrink-0 items-center justify-center rounded-full border border-[#EEEEEE] relative">
                             <img src="{{ asset('images/icons/notification.svg') }}" alt="icon">
-                            @if($pendingCount > 0)
-                                <div class="absolute -top-1 -right-1 w-5 h-5 flex rounded-full items-center justify-center bg-[#FD445E]">
+                            @if ($pendingCount > 0)
+                                <div
+                                    class="absolute -top-1 -right-1 w-5 h-5 flex rounded-full items-center justify-center bg-[#FD445E]">
                                     <p class="font-bold text-[10px] text-white">{{ $pendingCount }}</p>
                                 </div>
                             @endif
@@ -91,35 +90,84 @@
                 </div>
             @endif
 
+            @php
+                // Sorting helper (server-side via query string)
+                $currentSort = request('sort', 'created_at');
+                $currentDir = request('dir', 'desc');
+
+                $sortUrl = function ($field) use ($currentSort, $currentDir) {
+                    $dir = $currentSort === $field && $currentDir === 'asc' ? 'desc' : 'asc';
+                    return request()->fullUrlWithQuery(['sort' => $field, 'dir' => $dir, 'page' => 1]);
+                };
+
+                $sortIcon = function ($field) use ($currentSort, $currentDir) {
+                    if ($currentSort !== $field) {
+                        return '';
+                    }
+                    return $currentDir === 'asc' ? '↑' : '↓';
+                };
+
+                $sortClass = function ($field) use ($currentSort) {
+                    return $currentSort === $field
+                        ? 'text-[#0A090B] font-semibold'
+                        : 'text-[#7F8190] hover:text-[#0A090B]';
+                };
+            @endphp
+
             {{-- TABLE CONTENT --}}
             <div class="course-list-container flex flex-col px-5 mt-[30px] gap-[30px]">
 
                 @if ($reports->count() == 0)
                     {{-- EMPTY STATE --}}
-                    <div class="flex flex-col items-center justify-center py-[60px] bg-white rounded-[20px] border border-[#EEEEEE]">
-                        <div class="w-[100px] h-[100px] rounded-full bg-[#FBFBFB] flex items-center justify-center mb-5">
-                            <img src="{{ asset('images/icons/document-text.svg') }}" class="w-[46px] h-[46px] opacity-50">
+                    <div
+                        class="flex flex-col items-center justify-center py-[60px] bg-white rounded-[20px] border border-[#EEEEEE]">
+                        <div
+                            class="w-[100px] h-[100px] rounded-full bg-[#FBFBFB] flex items-center justify-center mb-5">
+                            <img src="{{ asset('images/icons/document-text.svg') }}"
+                                class="w-[46px] h-[46px] opacity-50">
                         </div>
                         <p class="text-[#7F8190] text-lg">Belum ada laporan yang masuk</p>
                     </div>
                 @else
                     {{-- TABLE HEADER --}}
-                    <div class="course-list-header flex flex-nowrap justify-between pb-4 pr-10 border-b border-[#EEEEEE]">
+                    <div
+                        class="course-list-header flex flex-nowrap justify-between pb-4 pr-10 border-b border-[#EEEEEE]">
                         <div class="flex shrink-0 w-[250px]">
-                            <p class="text-[#7F8190]">Laporan</p>
+                            <a href="{{ $sortUrl('title') }}"
+                                class="{{ $sortClass('title') }} flex items-center justify-between w-full">
+                                <span>Laporan</span>
+                                <span class="text-xs">{{ $sortIcon('title') }}</span>
+                            </a>
                         </div>
+
                         <div class="flex justify-center shrink-0 w-[150px]">
                             <p class="text-[#7F8190]">Pelapor</p>
                         </div>
+
                         <div class="flex justify-center shrink-0 w-[120px]">
-                            <p class="text-[#7F8190]">Tanggal</p>
+                            <a href="{{ $sortUrl('created_at') }}"
+                                class="{{ $sortClass('created_at') }} flex items-center gap-2">
+                                <span>Tanggal</span>
+                                <span class="text-xs">{{ $sortIcon('created_at') }}</span>
+                            </a>
                         </div>
+
                         <div class="flex justify-center shrink-0 w-[150px]">
-                            <p class="text-[#7F8190]">Kategori</p>
+                            <a href="{{ $sortUrl('category_count') }}"
+                                class="{{ $sortClass('category_count') }} flex items-center gap-2">
+                                <span>Kategori</span>
+                                <span class="text-xs">{{ $sortIcon('category_count') }}</span>
+                            </a>
                         </div>
+
                         <div class="flex justify-center shrink-0 w-[120px]">
-                            <p class="text-[#7F8190]">Status</p>
+                            <a href="{{ $sortUrl('status') }}"
+                                class="{{ $sortClass('status') }} flex items-center gap-2">
+                                <span>Status</span>
+                                <span class="text-xs">{{ $sortIcon('status') }}</span>
+                            </a>
                         </div>
+
                         <div class="flex justify-center shrink-0 w-[120px]">
                             <p class="text-[#7F8190]">Aksi</p>
                         </div>
@@ -127,22 +175,26 @@
 
                     {{-- TABLE ROWS --}}
                     @foreach ($reports as $report)
-                        <div class="list-items flex flex-nowrap justify-between pr-10 report-row" data-status="{{ $report->status }}">
+                        <div class="list-items flex flex-nowrap justify-between pr-10 report-row"
+                            data-status="{{ $report->status }}">
                             {{-- LAPORAN --}}
                             <div class="flex shrink-0 w-[250px]">
                                 <div class="flex items-center gap-4">
                                     <div class="w-14 h-14 flex shrink-0 overflow-hidden rounded-full bg-[#FBFBFB]">
                                         @if ($report->evidence)
-                                            <img src="{{ asset('storage/' . $report->evidence) }}" class="w-full h-full object-cover" alt="thumbnail">
+                                            <img src="{{ asset('storage/' . $report->evidence) }}"
+                                                class="w-full h-full object-cover" alt="thumbnail">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
-                                                <img src="{{ asset('images/icons/document-text.svg') }}" class="w-7 h-7 opacity-50" alt="icon">
+                                                <img src="{{ asset('images/icons/document-text.svg') }}"
+                                                    class="w-7 h-7 opacity-50" alt="icon">
                                             </div>
                                         @endif
                                     </div>
                                     <div class="flex flex-col gap-[2px]">
                                         <p class="font-bold">{{ Str::limit($report->title, 18) }}</p>
-                                        <p class="text-sm text-[#7F8190]">{{ $report->created_at->diffForHumans() }}</p>
+                                        <p class="text-sm text-[#7F8190]">{{ $report->created_at->diffForHumans() }}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +261,8 @@
                         <div id="modal-{{ $report->id }}"
                             class="fixed inset-0 z-10 hidden items-center justify-center bg-[#0A090B]/50">
 
-                            <div class="bg-white rounded-[20px] w-full max-w-[700px] max-h-[90vh] overflow-y-auto mx-5 relative">
+                            <div
+                                class="bg-white rounded-[20px] w-full max-w-[700px] max-h-[90vh] overflow-y-auto mx-5 relative">
 
                                 {{-- CLOSE BUTTON --}}
                                 <button type="button" onclick="closeModal({{ $report->id }})"
@@ -224,17 +277,33 @@
 
                                 {{-- MODAL HEADER --}}
                                 <div class="p-[30px] border-b border-[#EEEEEE]">
+                                    @php
+                                        // recompute status style for modal header (avoid leaked variable issue)
+                                        $statusStylesModal = [
+                                            'Menunggu' => 'bg-[#FFF2E6] text-[#F6770B]',
+                                            'Diproses' => 'bg-[#D5EFFE] text-[#066DFE]',
+                                            'Selesai' => 'bg-[#E6F9F0] text-[#06BC65]',
+                                            'Ditolak' => 'bg-[#FEE6E9] text-[#FD445E]',
+                                        ];
+                                        $statStyleModal =
+                                            $statusStylesModal[$report->status] ?? 'bg-[#FBFBFB] text-[#7F8190]';
+                                    @endphp
+
                                     <div class="flex items-start gap-5 pr-[50px]">
-                                        <div class="w-[70px] h-[70px] rounded-[14px] bg-[#FBFBFB] flex items-center justify-center shrink-0 overflow-hidden">
+                                        <div
+                                            class="w-[70px] h-[70px] rounded-[14px] bg-[#FBFBFB] flex items-center justify-center shrink-0 overflow-hidden">
                                             @if ($report->evidence)
-                                                <img src="{{ asset('storage/' . $report->evidence) }}" class="w-full h-full object-cover">
+                                                <img src="{{ asset('storage/' . $report->evidence) }}"
+                                                    class="w-full h-full object-cover">
                                             @else
-                                                <img src="{{ asset('images/icons/document-text.svg') }}" class="w-8 h-8 opacity-50">
+                                                <img src="{{ asset('images/icons/document-text.svg') }}"
+                                                    class="w-8 h-8 opacity-50">
                                             @endif
                                         </div>
                                         <div class="flex flex-col gap-2">
                                             <h2 class="font-bold text-xl leading-[30px]">{{ $report->title }}</h2>
-                                            <p class="p-[8px_16px] rounded-full text-sm font-bold {{ $statStyle }} w-fit">
+                                            <p
+                                                class="p-[8px_16px] rounded-full text-sm font-bold {{ $statStyleModal }} w-fit">
                                                 {{ $report->status }}
                                             </p>
                                         </div>
@@ -287,12 +356,14 @@
                                             </div>
                                             <a href="{{ asset('storage/' . $report->evidence) }}" target="_blank"
                                                 class="text-sm text-[#066DFE] font-semibold flex items-center gap-2 mt-1">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                                <svg width="16" height="16" viewBox="0 0 24 24"
+                                                    fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6">
+                                                    </path>
                                                     <polyline points="15 3 21 3 21 9"></polyline>
-                                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                                    <line x1="10" y1="14" x2="21"
+                                                        y2="3"></line>
                                                 </svg>
                                                 Buka di Tab Baru
                                             </a>
@@ -309,19 +380,30 @@
 
                                     {{-- UPDATE STATUS --}}
                                     <div class="flex flex-col gap-[30px] pt-4 border-t border-[#EEEEEE]">
-                                        <form action="{{ route('admin.reports.update', $report->id) }}" method="POST" class="flex flex-col gap-[30px]">
+                                        <form action="{{ route('admin.reports.update', $report->id) }}"
+                                            method="POST" class="flex flex-col gap-[30px]">
                                             @csrf
                                             @method('PUT')
 
                                             {{-- STATUS DROPDOWN --}}
                                             <div class="flex flex-col gap-[10px]">
                                                 <p class="text-sm text-[#7F8190]">Status</p>
-                                                <div class="flex items-center p-4 border border-[#EEEEEE] rounded-full focus-within:border-2 focus-within:border-[#0A090B]">
-                                                    <select name="status" required class="w-full outline-none font-semibold">
-                                                        <option value="Menunggu" {{ $report->status == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
-                                                        <option value="Diproses" {{ $report->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                                                        <option value="Selesai" {{ $report->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                                                        <option value="Ditolak" {{ $report->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                                <div
+                                                    class="flex items-center p-4 border border-[#EEEEEE] rounded-full focus-within:border-2 focus-within:border-[#0A090B]">
+                                                    <select name="status" required
+                                                        class="w-full outline-none font-semibold">
+                                                        <option value="Menunggu"
+                                                            {{ $report->status == 'Menunggu' ? 'selected' : '' }}>
+                                                            Menunggu</option>
+                                                        <option value="Diproses"
+                                                            {{ $report->status == 'Diproses' ? 'selected' : '' }}>
+                                                            Diproses</option>
+                                                        <option value="Selesai"
+                                                            {{ $report->status == 'Selesai' ? 'selected' : '' }}>
+                                                            Selesai</option>
+                                                        <option value="Ditolak"
+                                                            {{ $report->status == 'Ditolak' ? 'selected' : '' }}>
+                                                            Ditolak</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -329,7 +411,8 @@
                                             {{-- CATATAN ADMIN --}}
                                             <div class="flex flex-col gap-[10px]">
                                                 <p class="text-sm text-[#7F8190]">Catatan Admin (opsional)</p>
-                                                <div class="flex items-start p-4 border border-[#EEEEEE] rounded-[20px] focus-within:border-2 focus-within:border-[#0A090B]">
+                                                <div
+                                                    class="flex items-start p-4 border border-[#EEEEEE] rounded-[20px] focus-within:border-2 focus-within:border-[#0A090B]">
                                                     <textarea name="admin_notes" rows="2"
                                                         class="w-full outline-none font-semibold placeholder:font-normal placeholder:text-[#7F8190]"
                                                         placeholder="Tulis catatan atau alasan tindakan...">{{ $report->admin_notes }}</textarea>
@@ -355,6 +438,11 @@
                             </div>
                         </div>
                     @endforeach
+
+                    {{-- PAGINATION --}}
+                    <div class="pt-6">
+                        {{ $reports->links() }}
+                    </div>
                 @endif
 
             </div>
